@@ -1615,8 +1615,8 @@ bool CGameProcMain::MsgSend_PartyOrForceCreate(int iPartyOrForce, const std::str
 			s_pPlayer->m_InfoBase.eClass, 
 			s_pPlayer->m_InfoBase.iHP, 
 			s_pPlayer->m_InfoBase.iHPMax,
-			s_pPlayer->m_InfoBase.iMP,
-			s_pPlayer->m_InfoBase.iMPMax);  // 내건 미리 넣어 놓는다..
+			s_pPlayer->m_InfoExt.iMSP,
+			s_pPlayer->m_InfoExt.iMSPMax);  // 내건 미리 넣어 놓는다..
 	}
 
 	//TRACE ("Party or Force 생성 신청 - Target ID(%s)\n", szID.c_str());
@@ -5097,8 +5097,8 @@ void CGameProcMain::MsgRecv_PartyOrForce(Packet& pkt)
 
 		case N3_SP_PARTY_OR_FORCE_INSERT:			// 0x03	// Send - s1(ID) | Recv - s3(ID, HPMax, HP, MPMax, MP) b2(Level, Class) - 문자열은 ID 로 알아낸다..
 		{
-			int iID = pkt.read<int16_t>();
-			int iErrorCode = pkt.read<uint8_t>();
+			int iErrorCode	= pkt.read<int8_t>();
+			int iID			= pkt.read<int16_t>();
 
 			if (iErrorCode >= 0)
 			{
