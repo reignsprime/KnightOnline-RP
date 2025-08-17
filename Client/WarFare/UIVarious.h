@@ -162,7 +162,7 @@ public:
 	void ClearLists();
 
 	void UpdatePageNumber(int nNewPageNr = -1);
-	void UpdateMemberCount(int nMemberCount);
+	void UpdateMemberCount(int nMemberCountOnline, int nMemberCount);
 
 	void PreviousPageButtonHandler();
 	void NextPageButtonHandler();
