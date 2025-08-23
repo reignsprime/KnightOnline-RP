@@ -573,7 +573,7 @@ void CUIKnights::Clear()
 
 	ClearLists();
 	UpdatePageNumber(1);
-	UpdateMemberCount(0);
+	UpdateMemberCount(0, 0);
 
 	m_pText_Name->SetString("");
 	m_pText_Duty->SetString("");
@@ -645,9 +645,9 @@ void CUIKnights::UpdatePageNumber(int nNewPageNr) // @Demircivi: default value f
 	m_pText_Page->SetStringAsInt(m_iPageCur);
 }
 
-void CUIKnights::UpdateMemberCount(int nMemberCount)
+void CUIKnights::UpdateMemberCount(int nMemberCountOnline, int nMemberCount)
 {
-	std::string memberCount = std::to_string(nMemberCount); // TODO: @Demircivi: it should be %d/%d, second %d is clan max member count.
+	std::string memberCount = fmt::format("{} / {}", nMemberCountOnline, nMemberCount);
 	m_pText_MemberCount->SetString(memberCount);
 }
 
@@ -908,14 +908,14 @@ void CUIKnights::MsgSend_MemberInfoAll()
 bool CUIKnights::MsgRecv_MemberInfo(Packet& pkt)
 {
 	pkt.read<int16_t>(); // @Demircivi: packet sizes, which are unused.
-	pkt.read<int16_t>(); // @Demircivi: packet sizes, which are unused.
-	pkt.read<int16_t>(); // @Demircivi: packet sizes, which are unused.
+	int iMemberCountOnline = pkt.read<int16_t>();
+	int iMemberCount = pkt.read<int16_t>(); // @Demircivi: packet sizes, which are unused.
 
-	int iMemberCount = pkt.read<int16_t>();
+	int iMemberCountList = pkt.read<int16_t>();
 
-	UpdateMemberCount(iMemberCount);
+	UpdateMemberCount(iMemberCountOnline, iMemberCount);
 
-	for (int i = 0; i < iMemberCount; i++)
+	for (int i = 0; i < iMemberCountList; i++)
 	{
 		int iNameLength = pkt.read<int16_t>();
 		__ASSERT(iNameLength > 0, "iNameLength was below 0!");
