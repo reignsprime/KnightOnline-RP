@@ -637,17 +637,17 @@ bool CUIKnights::Load(HANDLE hFile)
 	return true;
 }
 
-void CUIKnights::UpdatePageNumber(int nNewPageNr) // @Demircivi: default value for nNewPageNr is -1.
+void CUIKnights::UpdatePageNumber(int iNewPageNo /*= -1*/)
 {
-	if (nNewPageNr != -1)
-		m_iPageCur = nNewPageNr;
+	if (iNewPageNo != -1)
+		m_iPageCur = iNewPageNo;
 
 	m_pText_Page->SetStringAsInt(m_iPageCur);
 }
 
-void CUIKnights::UpdateMemberCount(int nMemberCountOnline, int nMemberCount)
+void CUIKnights::UpdateMemberCount(int iMemberCountOnline, int iMemberCountTotal)
 {
-	std::string memberCount = fmt::format("{} / {}", nMemberCountOnline, nMemberCount);
+	std::string memberCount = fmt::format("{} / {}", iMemberCountOnline, iMemberCountTotal);
 	m_pText_MemberCount->SetString(memberCount);
 }
 
@@ -909,11 +909,11 @@ bool CUIKnights::MsgRecv_MemberInfo(Packet& pkt)
 {
 	pkt.read<int16_t>(); // @Demircivi: packet sizes, which are unused.
 	int iMemberCountOnline = pkt.read<int16_t>();
-	int iMemberCount = pkt.read<int16_t>(); // @Demircivi: packet sizes, which are unused.
+	int iMemberCountTotal = pkt.read<int16_t>();
 
 	int iMemberCountList = pkt.read<int16_t>();
 
-	UpdateMemberCount(iMemberCountOnline, iMemberCount);
+	UpdateMemberCount(iMemberCountOnline, iMemberCountTotal);
 
 	for (int i = 0; i < iMemberCountList; i++)
 	{
